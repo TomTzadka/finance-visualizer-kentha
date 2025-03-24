@@ -1,15 +1,16 @@
-
 import React from 'react';
-import { 
-  LineChart, Line, BarChart, Bar, PieChart, Pie, 
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
-  ResponsiveContainer, Cell 
+import {
+  LineChart, Line, BarChart, Bar, PieChart, Pie,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, Cell
 } from 'recharts';
 import { ArrowUpRight, Wallet, TrendingUp, Percent, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const FinanceDashboard: React.FC = () => {
-  // Sample data
+  const { t, isRTL } = useLanguage();
+
   const monthlyData = [
     { name: 'Jan', traditional: 4000, equity: 2400, venture: 1400 },
     { name: 'Feb', traditional: 4200, equity: 2800, venture: 1500 },
@@ -20,72 +21,75 @@ const FinanceDashboard: React.FC = () => {
   ];
 
   const comparativeData = [
-    { name: 'Risk', traditional: 30, equity: 60, venture: 85 },
-    { name: 'Return', traditional: 40, equity: 70, venture: 90 },
-    { name: 'Time', traditional: 60, equity: 50, venture: 40 },
-    { name: 'Control', traditional: 85, equity: 50, venture: 25 },
+    { name: isRTL ? 'סיכון' : 'Risk', traditional: 30, equity: 60, venture: 85 },
+    { name: isRTL ? 'תשואה' : 'Return', traditional: 40, equity: 70, venture: 90 },
+    { name: isRTL ? 'זמן' : 'Time', traditional: 60, equity: 50, venture: 40 },
+    { name: isRTL ? 'שליטה' : 'Control', traditional: 85, equity: 50, venture: 25 },
   ];
 
   const allocationData = [
-    { name: 'Traditional Loan', value: 35, color: '#3273F3' },
-    { name: 'Equity Partnership', value: 45, color: '#6FAFFF' },
-    { name: 'Venture Capital', value: 20, color: '#A6D0FF' },
+    { name: isRTL ? 'הלוואה מסורתית' : 'Traditional Loan', value: 40, color: '#3273F3' },
+    { name: isRTL ? 'שיתוף בהון' : 'Equity Partnership', value: 50, color: '#6FAFFF' },
+    { name: isRTL ? 'הון סיכון' : 'Venture Capital', value: 10, color: '#A6D0FF' },
   ];
 
   const statCards = [
-    { 
-      title: 'Available Credit', 
-      value: '$2.5M', 
-      change: '+12%',
+    {
+      title: t('Available Credit', 'אשראי זמין'),
+      value: '$10M',
+      change: '+15%',
       icon: <Wallet className="h-5 w-5" />,
-      positive: true 
+      positive: true
     },
-    { 
-      title: 'Growth Rate', 
-      value: '18.5%', 
-      change: '+2.3%',
+    {
+      title: t('Growth Rate', 'שיעור צמיחה'),
+      value: '18%',
+      change: '+3%',
       icon: <TrendingUp className="h-5 w-5" />,
-      positive: true 
+      positive: true
     },
-    { 
-      title: 'Interest Rate', 
-      value: '3.75%', 
-      change: '-0.25%',
+    {
+      title: t('Interest Rate', 'שיעור ריבית'),
+      value: '4.5%',
+      change: '-0.5%',
       icon: <Percent className="h-5 w-5" />,
-      positive: true 
+      positive: true
     },
-    { 
-      title: 'Term Length', 
-      value: '15 Years', 
-      change: 'Flexible',
+    {
+      title: t('Term Length', 'משך תקופה'),
+      value: t('15 Years', '15 שנה'),
+      change: t('Flexible', 'גמיש'),
       icon: <Calendar className="h-5 w-5" />,
-      positive: null 
+      positive: null
     },
   ];
 
   return (
-    <section id="dashboard" className="py-20 bg-subtle-gradient">
+    <section id="dashboard" className="py-20 bg-subtle-gradient" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12 max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Financial Dashboard</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            {t('Ken HaTor Financial Dashboard', 'לוח מחוונים פיננסי - קן התור')}
+          </h2>
           <p className="text-muted-foreground">
-            A comprehensive overview of Ken HaTor's financing capabilities and performance metrics.
+            {t(
+              'A comprehensive overview of Ken HaTor\'s financing capabilities and performance metrics, based on its self-financing abilities and banking partnerships.',
+              'סקירה מקיפה של יכולות המימון ומדדי הביצוע של קן התור, בהתבסס על מימון עצמי ושיתופי פעולה עם בנקים.'
+            )}
           </p>
         </div>
 
-        {/* Stats Cards */}
+        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
           {statCards.map((card, index) => (
             <Card key={index} className="overflow-hidden card-hover">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="bg-finance-accent p-2 rounded-lg">
-                    <div className="text-finance-primary">
-                      {card.icon}
-                    </div>
+                    <div className="text-finance-primary">{card.icon}</div>
                   </div>
                   {card.positive !== null && (
-                    <div className={`flex items-center space-x-1 text-sm ${
+                    <div className={`flex items-center ${isRTL ? 'space-x-reverse' : 'space-x-1'} text-sm ${
                       card.positive ? 'text-finance-success' : 'text-finance-error'
                     }`}>
                       <span>{card.change}</span>
@@ -108,7 +112,7 @@ const FinanceDashboard: React.FC = () => {
           {/* Line Chart */}
           <Card className="card-hover">
             <CardHeader className="pb-2">
-              <CardTitle>Monthly Financing Trends</CardTitle>
+              <CardTitle>{t('Monthly Financing Trends', 'מגמות מימון חודשיות')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -117,39 +121,11 @@ const FinanceDashboard: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="name" />
                     <YAxis />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                        border: 'none'
-                      }} 
-                    />
+                    <Tooltip contentStyle={{ backgroundColor: 'white', borderRadius: 8, boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', border: 'none' }} />
                     <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="traditional" 
-                      name="Traditional Loan" 
-                      stroke="#3273F3" 
-                      activeDot={{ r: 8 }} 
-                      strokeWidth={2}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="equity" 
-                      name="Equity Partnership" 
-                      stroke="#6FAFFF" 
-                      activeDot={{ r: 8 }} 
-                      strokeWidth={2}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="venture" 
-                      name="Venture Capital" 
-                      stroke="#A6D0FF" 
-                      activeDot={{ r: 8 }} 
-                      strokeWidth={2}
-                    />
+                    <Line type="monotone" dataKey="traditional" name={t('Traditional Loan', 'הלוואה מסורתית')} stroke="#3273F3" strokeWidth={2} activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="equity" name={t('Equity Partnership', 'שיתוף בהון')} stroke="#6FAFFF" strokeWidth={2} activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="venture" name={t('Venture Capital', 'הון סיכון')} stroke="#A6D0FF" strokeWidth={2} activeDot={{ r: 8 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -159,7 +135,7 @@ const FinanceDashboard: React.FC = () => {
           {/* Bar Chart */}
           <Card className="card-hover">
             <CardHeader className="pb-2">
-              <CardTitle>Financing Path Comparison</CardTitle>
+              <CardTitle>{t('Financing Path Comparison', 'השוואת מסלולי מימון')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -168,18 +144,11 @@ const FinanceDashboard: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="name" />
                     <YAxis />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                        border: 'none'
-                      }} 
-                    />
+                    <Tooltip contentStyle={{ backgroundColor: 'white', borderRadius: 8, boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', border: 'none' }} />
                     <Legend />
-                    <Bar dataKey="traditional" name="Traditional Loan" fill="#3273F3" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="equity" name="Equity Partnership" fill="#6FAFFF" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="venture" name="Venture Capital" fill="#A6D0FF" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="traditional" name={t('Traditional Loan', 'הלוואה מסורתית')} fill="#3273F3" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="equity" name={t('Equity Partnership', 'שיתוף בהון')} fill="#6FAFFF" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="venture" name={t('Venture Capital', 'הון סיכון')} fill="#A6D0FF" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -190,7 +159,7 @@ const FinanceDashboard: React.FC = () => {
         {/* Pie Chart */}
         <Card className="card-hover">
           <CardHeader className="pb-2">
-            <CardTitle>Recommended Financing Allocation</CardTitle>
+            <CardTitle>{t('Recommended Financing Allocation', 'הקצאת מימון מומלצת')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-80 flex items-center justify-center">
@@ -203,7 +172,6 @@ const FinanceDashboard: React.FC = () => {
                     labelLine={false}
                     outerRadius={140}
                     innerRadius={70}
-                    fill="#8884d8"
                     dataKey="value"
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
@@ -211,14 +179,7 @@ const FinanceDashboard: React.FC = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'white', 
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                      border: 'none'
-                    }} 
-                  />
+                  <Tooltip contentStyle={{ backgroundColor: 'white', borderRadius: 8, boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', border: 'none' }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>

@@ -34,7 +34,8 @@ const Header: React.FC = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           <NavLink href="#dashboard">{t('Dashboard', 'לוח בקרה')}</NavLink>
-          <NavLink href="#financing-paths">{t('Financing Paths', 'מסלולי מימון')}</NavLink>
+          {/* <NavLink href="#financing-paths">{t('Financing Paths', 'מסלולי מימון')}</NavLink> */}
+          <NavLink href="#financing-options">{t('Financing options', 'מסלולי מימון')}</NavLink>
           <NavLink href="#analysis">{t('Analysis', 'ניתוח')}</NavLink>
           <Button size="sm" className="ml-4">{t('Get Started', 'התחל')}</Button>
           <LanguageSwitcher />

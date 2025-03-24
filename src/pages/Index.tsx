@@ -39,12 +39,12 @@ const Index: React.FC = () => {
 
   return (
     <MainLayout>
-      <HeroSection />
+      {/* <HeroSection /> */}
       <FinanceDashboard />
       <KenHaTorFinance />
       <FinancingPaths />
-      <AnalysisForm />
-      <ResultsDisplay />
+      {/* <AnalysisForm /> */}
+      {/* <ResultsDisplay /> */}
     </MainLayout>
   );
 };
