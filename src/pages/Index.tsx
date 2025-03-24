@@ -6,6 +6,7 @@ import FinanceDashboard from '@/components/FinanceDashboard';
 import FinancingPaths from '@/components/FinancingPaths';
 import AnalysisForm from '@/components/AnalysisForm';
 import ResultsDisplay from '@/components/ResultsDisplay';
+import KenHaTorFinance from '@/components/KenHaTorFinance';
 
 const Index: React.FC = () => {
   useEffect(() => {
@@ -40,6 +41,7 @@ const Index: React.FC = () => {
     <MainLayout>
       <HeroSection />
       <FinanceDashboard />
+      <KenHaTorFinance />
       <FinancingPaths />
       <AnalysisForm />
       <ResultsDisplay />
