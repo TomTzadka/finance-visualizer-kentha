@@ -1,395 +1,198 @@
-
 import React, { useState } from 'react';
-import {
-  Building, Briefcase, ChevronRight, 
-  Shield, Users, BarChart, Percent, Timer,
-  Check, ArrowRight
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, BarChart, Briefcase, Building, Check, ChevronRight, Percent, Shield, Timer, Users } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const KenHaTorFinance: React.FC = () => {
-  const [activeCompany, setActiveCompany] = useState('ken-hator');
-  
-  // Financing options data
+  const [activeTab, setActiveTab] = useState('overview');
+  const { t, isRTL } = useLanguage();
+
   const financingOptions = [
     {
-      id: "low-deposit",
-      title: "מקדמה נמוכה",
-      titleEn: "Low Initial Deposit",
-      description: "מסלול המאפשר כניסה לעסקה עם הון עצמי מינימלי ודחיית עיקר התשלום לסוף התהליך",
-      descriptionEn: "Enter with minimal equity and defer most payment until project completion",
-      depositRange: "7-10%",
-      remainingPayment: "90-93%",
-      idealFor: "זוגות צעירים, משפרי דיור, משקיעים",
-      idealForEn: "Young couples, housing upgraders, investors seeking leverage",
+      id: 'low-deposit',
+      title: 'מקדמה נמוכה',
+      titleEn: 'Low Deposit Path',
+      description: 'דחיית רוב התשלום לסוף התקופה',
+      descriptionEn: 'Defer most payment until project completion, with minimal upfront commitment.',
+      icon: <Percent className="h-5 w-5 text-white" />,
       features: [
-        "מקדמה של 7-10% בלבד בחתימת החוזה",
-        "יתרת התשלום באכלוס",
-        "ערבויות חוק מכר מלאות",
-        "אפשרות להתאמה אישית של לוח התשלומים",
+        'תשלום של 7-10% בלבד בחתימה',
+        'תשלום העיקרי נדחה לאכלוס',
+        'ערבות בנקאית על פי חוק המכר',
+        'חשיפה פיננסית מופחתת בשלבי הבנייה',
+        'אפשרויות להתאמה אישית של לוח תשלומים'
       ],
       featuresEn: [
-        "Only 7-10% deposit on contract signing",
-        "Remaining payment at occupancy",
-        "Full bank guarantees",
-        "Customizable payment schedule",
+        'Pay only 7-10% at signing',
+        'Main payment deferred to occupancy',
+        'Bank guarantees as per Sale Law',
+        'Reduced financial exposure during construction',
+        'Options for customized payment schedules'
       ],
-      icon: <Percent className="h-6 w-6" />,
+      idealFor: 'זוגות צעירים עם הון עצמי מוגבל; משפרי דיור המעוניינים לנצל את הזמן למכירת הדירה הנוכחית',
+      idealForEn: 'Young couples with limited equity; homebuyers looking to maximize liquidity',
+      depositRange: '7-10%'
     },
     {
-      id: "fixed-rate",
-      title: "ריבית קבועה",
-      titleEn: "Fixed Rate Mortgage",
-      description: "הצעת מימון בריבית קבועה נמוכה לתקופה ארוכה, המקנה ודאות להחזרים החודשיים",
-      descriptionEn: "Low fixed-rate financing for long term, providing certainty of monthly payments",
-      rate: "2.99%",
-      term: "20 שנה",
-      termEn: "20 years",
-      idealFor: "משפרי דיור, רוכשים בערים מרכזיות",
-      idealForEn: "Urban homebuyers sensitive to interest rate fluctuations",
+      id: 'fixed-rate',
+      title: 'משכנתא בריבית קבועה',
+      titleEn: 'Fixed Rate Mortgage',
+      description: 'הבטחת עתיד פיננסי יציב עם ריבית קבועה לטווח ארוך',
+      descriptionEn: 'Secure a stable financial future with long-term fixed interest rates.',
+      icon: <BarChart className="h-5 w-5 text-white" />,
       features: [
-        "ריבית קבועה של 2.99% בלבד למשך 20 שנה",
-        "חיסכון משמעותי לאורך תקופת המשכנתא",
-        "הגנה מפני עליית ריבית בשוק",
-        "שיתוף פעולה עם בנקים מובילים",
+        'ריבית קבועה של 2.99% ל-20 שנה',
+        'הגנה מפני עליות ריבית עתידיות',
+        'תשלומי משכנתא יציבים וצפויים',
+        'חיסכון משמעותי לאורך חיי ההלוואה',
+        'שיתוף פעולה עם מוסדות פיננסיים מובילים'
       ],
       featuresEn: [
-        "Fixed rate of only 2.99% for 20 years",
-        "Significant savings over mortgage lifetime",
-        "Protection against market rate increases",
-        "Partnership with leading banks",
+        '2.99% fixed interest rate for 20 years',
+        'Protection against future interest rate increases',
+        'Stable and predictable mortgage payments',
+        'Significant savings over the life of the loan',
+        'Collaboration with leading financial institutions'
       ],
-      icon: <Timer className="h-6 w-6" />,
+      idealFor: 'משפחות המחפשות ודאות פיננסית; רוכשים הרגישים לשינויי ריבית',
+      idealForEn: 'Families seeking financial certainty; buyers sensitive to interest rate changes',
+      rate: '2.99%',
+      term: '20 שנה',
+      termEn: '20 years'
     },
     {
-      id: "pre-sale",
-      title: "פרי-סייל",
-      titleEn: "Pre-Sale Benefits",
-      description: "הטבות מיוחדות לרוכשים בשלבים מוקדמים של הפרויקט לפני השקה מלאה",
-      descriptionEn: "Special benefits for early buyers before full project launch",
-      discount: "5-8%",
-      idealFor: "מזהי הזדמנויות, משקיעים",
-      idealForEn: "Opportunity seekers, investors, early adopters",
+      id: 'pre-sale',
+      title: 'רכישה מוקדמת (פרי-סייל)',
+      titleEn: 'Early Purchase (Pre-Sale)',
+      description: 'הטבות בלעדיות לרוכשים מוקדמים',
+      descriptionEn: 'Exclusive benefits for early buyers in the project.',
+      icon: <Timer className="h-5 w-5 text-white" />,
       features: [
-        "מחירים אטרקטיביים לרוכשים מוקדמים",
-        "אפשרות בחירה של הדירות הטובות ביותר",
-        "תנאי מימון מועדפים",
-        "אפשרות לשדרוגים ללא עלות",
+        'מחירים מופחתים לרוכשים ראשונים',
+        'עדיפות בבחירת דירה',
+        'אפשרות למקדמה נמוכה במיוחד (7%)',
+        'תנאי תשלום מועדפים',
+        'פוטנציאל לעליית ערך גבוהה יותר'
       ],
       featuresEn: [
-        "Attractive pricing for early buyers",
-        "First choice of best units",
-        "Preferred financing terms",
-        "Possibility of free upgrades",
+        'Reduced prices for first buyers',
+        'Priority in apartment selection',
+        'Possibility of especially low down payment (7%)',
+        'Preferred payment terms',
+        'Higher potential for value appreciation'
       ],
-      icon: <BarChart className="h-6 w-6" />,
-    },
-  ];
-  
-  // Companies comparison data
-  const companies = [
-    {
-      id: "ken-hator",
-      name: "קן התור",
-      nameEn: "Ken HaTor",
-      deposit: "7-10%",
-      paymentMethod: "גמיש במהלך הבנייה, עיקר הסכום באכלוס",
-      paymentMethodEn: "Flexible during construction, majority at occupancy",
-      specialBenefits: [
-        "משכנתא בריבית קבועה נמוכה (2.99% ל-20 שנה)",
-        "מחירי פריסייל למקדימים",
-        "התאמות אישיות בלוח התשלומים",
-      ],
-      specialBenefitsEn: [
-        "Low fixed-rate mortgage (2.99% for 20 years)",
-        "Pre-sale pricing for early buyers",
-        "Personalized payment schedules",
-      ],
-      targetAudience: "רוכשי דירות באזורי ביקוש (ת\"א) שיכולים לעמוד במחיר אך מעדיפים נזילות; משפרי דיור בערים; משקיעים המחפשים מינוף גבוה עם יזם אמין",
-      targetAudienceEn: "Homebuyers in high-demand areas (Tel Aviv) who can afford prices but prefer liquidity; urban housing upgraders; investors seeking high leverage with reliable developer",
-      riskLevel: "בינוני",
-      riskLevelEn: "Medium",
-      riskPercent: 60,
-      financialStrength: "גבוהה",
-      financialStrengthEn: "High",
-      strengthPercent: 85,
-    },
-    {
-      id: "rotshtein",
-      name: "רותשטיין",
-      nameEn: "Rotshtein",
-      deposit: "10-15%",
-      paymentMethod: "יתרה באכלוס (85-90%)",
-      paymentMethodEn: "Remainder at occupancy (85-90%)",
-      specialBenefits: [
-        "החזר חודשי לרוכש למשך מספר שנים",
-        "פטור מהצמדה למדד התשומות עד המסירה",
-        "מבצעים נקודתיים: 10% מקדמה לדירות נבחרות",
-      ],
-      specialBenefitsEn: [
-        "Monthly refund to buyer for several years",
-        "Exemption from construction index linkage until delivery",
-        "Special offers: 10% deposit for selected apartments",
-      ],
-      targetAudience: "משפחות וזוגות בערי לווין ופרויקטי התחדשות בפריפריה; מעמד ביניים הזקוק להקלה במימון; גם משקיעים מקומיים במידה מוגבלת",
-      targetAudienceEn: "Families in satellite cities and urban renewal projects; middle class needing financing relief; local investors to a limited extent",
-      riskLevel: "בינוני-נמוך",
-      riskLevelEn: "Medium-Low",
-      riskPercent: 45,
-      financialStrength: "גבוהה",
-      financialStrengthEn: "High",
-      strengthPercent: 80,
-    },
-    {
-      id: "sela",
-      name: "סלע בינוי",
-      nameEn: "Sela Binui",
-      deposit: "5%",
-      paymentMethod: "95% באכלוס (ללא ריבית/הצמדה)",
-      paymentMethodEn: "95% at occupancy (without interest/linkage)",
-      specialBenefits: [
-        "ויתור מלא על ריבית והצמדה על חלק דחוי",
-        "לעיתים בשיתוף עם שותף (איסתא) למימון ההטבה",
-        "מבצע תקף בעיקר לדירות אחרונות/אכלוס מיידי",
-      ],
-      specialBenefitsEn: [
-        "Complete waiver of interest and linkage on deferred portion",
-        "Sometimes in partnership with Issta for financing benefit",
-        "Offer usually valid for last units/immediate occupancy",
-      ],
-      targetAudience: "רוכשים עם הון עצמי מזערי שלא יכולים לקנות אחרת; צעירים בתחילת הדרך; משקיעים בעלי כושר החזר עתידי שמוכנים למינוף כמעט מלא",
-      targetAudienceEn: "Buyers with minimal equity who cannot buy otherwise; young starters; investors with future repayment capacity willing to leverage almost fully",
-      riskLevel: "גבוה",
-      riskLevelEn: "High",
-      riskPercent: 85,
-      financialStrength: "בינונית",
-      financialStrengthEn: "Medium",
-      strengthPercent: 65,
-    },
-    {
-      id: "aura",
-      name: "אאורה",
-      nameEn: "Aura",
-      deposit: "20%",
-      paymentMethod: "80% באכלוס",
-      paymentMethodEn: "80% at occupancy",
-      specialBenefits: [
-        "מודל מימון \"שמרני\" הנתמך ע\"י הבנקים",
-        "ללא הצמדה על חלק ששולם",
-        "אפשרות להטבות נוספות בפרויקטים ספציפיים",
-      ],
-      specialBenefitsEn: [
-        "\"Conservative\" financing model supported by banks",
-        "No linkage on paid portion",
-        "Possibility of additional benefits in specific projects",
-      ],
-      targetAudience: "זוגות צעירים זכאי משכנתא סטנדרטית; משפרי דיור עם הון ממכירת דירה קיימת; משקיעים סולידיים שממנפים רק עד 80%",
-      targetAudienceEn: "Young couples eligible for standard mortgages; upgraders with equity from existing home sale; conservative investors leveraging only up to 80%",
-      riskLevel: "נמוך",
-      riskLevelEn: "Low",
-      riskPercent: 30,
-      financialStrength: "גבוהה",
-      financialStrengthEn: "High",
-      strengthPercent: 85,
-    },
-  ];
-  
-  // Client segments data
-  const clientSegments = [
-    {
-      id: "young-couples",
-      name: "זוגות צעירים",
-      nameEn: "Young Couples",
-      description: "רוכשי דירה ראשונה, לרוב עם הון עצמי מוגבל",
-      descriptionEn: "First-time homebuyers, typically with limited equity",
-      idealPlans: ["מקדמה נמוכה", "ריבית קבועה"],
-      idealPlansEn: ["Low deposit", "Fixed rate mortgage"],
-      benefits: [
-        "כניסה לדירה עם הון עצמי נמוך (7-10%)",
-        "דחיית עיקר התשלום לאכלוס",
-        "זמן להתארגנות פיננסית",
-        "פריסת תשלומים גמישה",
-      ],
-      benefitsEn: [
-        "Entry with low equity (7-10%)",
-        "Deferral of main payment until occupancy",
-        "Time for financial organization",
-        "Flexible payment schedule",
-      ],
-      icon: <Users className="h-12 w-12" />,
-    },
-    {
-      id: "upgraders",
-      name: "משפרי דיור",
-      nameEn: "Housing Upgraders",
-      description: "בעלי דירה קיימת המעוניינים לשדרג לדירה טובה יותר",
-      descriptionEn: "Existing homeowners looking to upgrade to a better property",
-      idealPlans: ["ריבית קבועה", "פרי-סייל"],
-      idealPlansEn: ["Fixed rate mortgage", "Pre-sale benefits"],
-      benefits: [
-        "הגנה מפני עליית ריבית (2.99% קבוע ל-20 שנה)",
-        "אפשרות למכור את הדירה הקיימת לקראת האכלוס",
-        "גמישות בעיתוי התשלומים",
-        "יציבות בהחזרי המשכנתא",
-      ],
-      benefitsEn: [
-        "Protection against interest rate increases (2.99% fixed for 20 years)",
-        "Ability to sell existing apartment near occupancy",
-        "Flexibility in payment timing",
-        "Stability in mortgage repayments",
-      ],
-      icon: <Building className="h-12 w-12" />,
-    },
-    {
-      id: "investors",
-      name: "משקיעים",
-      nameEn: "Investors",
-      description: "רוכשים להשקעה המחפשים מינוף והזדמנויות",
-      descriptionEn: "Buyers seeking leverage and investment opportunities",
-      idealPlans: ["מקדמה נמוכה", "פרי-סייל"],
-      idealPlansEn: ["Low deposit", "Pre-sale benefits"],
-      benefits: [
-        "מינוף מקסימלי עם רק 7-10% הון עצמי",
-        "אפשרות למכירה לפני אכלוס (אקזיט מהיר)",
-        "הטבות פרי-סייל לשיפור תשואה",
-        "אפשרות לרכישת מספר יחידות בהון מוגבל",
-      ],
-      benefitsEn: [
-        "Maximum leverage with only 7-10% equity",
-        "Opportunity to sell before occupancy (quick exit)",
-        "Pre-sale benefits to improve returns",
-        "Ability to purchase multiple units with limited capital",
-      ],
-      icon: <Briefcase className="h-12 w-12" />,
-    },
+      idealFor: 'משקיעים ארוכי טווח; רוכשים הערוכים להחלטה מהירה',
+      idealForEn: 'Long-term investors; buyers prepared for quick decision making',
+      discount: '5-10%'
+    }
   ];
 
-  // Similarities with competitors
-  const similarities = [
+  const companyRiskProfiles = [
     {
-      title: "דחיית תשלומים",
-      titleEn: "Payment Deferral",
-      description: "רוב החברות מציעות לדחות חלק ניכר מהתשלום לסוף, במודל \"שלם מעט עכשיו - הרבה אחר כך\"",
-      descriptionEn: "Most companies offer to defer a significant portion of payment until the end, following a \"pay little now - much later\" model",
+      id: 'ken-hator',
+      name: 'קן התור',
+      nameEn: 'Ken HaTor',
+      riskLevel: 'סיכון נמוך',
+      riskLevelEn: 'Low Risk',
+      riskPercent: 25
     },
     {
-      title: "הון עצמי נמוך",
-      titleEn: "Low Equity",
-      description: "המגמה הכללית היא להוריד את רף הכניסה ולאפשר רכישה עם הון עצמי מופחת (5-20%)",
-      descriptionEn: "The general trend is to lower the entry threshold and enable purchase with reduced equity (5-20%)",
+      id: 'sela',
+      name: 'סלע בינוי',
+      nameEn: 'Sela Construction',
+      riskLevel: 'סיכון גבוה',
+      riskLevelEn: 'High Risk',
+      riskPercent: 85
     },
     {
-      title: "ליווי בנקאי",
-      titleEn: "Bank Supervision",
-      description: "כל החברות פועלות בליווי בנקאי המספק ערבויות חוק מכר ורשת ביטחון לרוכשים",
-      descriptionEn: "All companies operate under bank supervision providing legal guarantees and a safety net for buyers",
+      id: 'aura',
+      name: 'אאורה ישראל',
+      nameEn: 'Aura Israel',
+      riskLevel: 'סיכון בינוני-נמוך',
+      riskLevelEn: 'Medium-Low Risk',
+      riskPercent: 40
     },
     {
-      title: "התאמה לתנאי שוק",
-      titleEn: "Market Adaptation",
-      description: "מסלולי המימון המיוחדים נוצרו כתגובה לשוק איטי יותר והפכו למרכיב שיווקי מרכזי",
-      descriptionEn: "Special financing routes were created in response to a slower market and became a central marketing component",
-    },
-  ];
-
-  // Differences from competitors
-  const differences = [
-    {
-      title: "מידת האגרסיביות",
-      titleEn: "Level of Aggressiveness",
-      description: "קן התור מציעה 7-10%, סלע מציעה 5%, אאורה 20% - הבדלים משקפים סיכון ויציבות",
-      descriptionEn: "Ken HaTor offers 7-10%, Sela offers 5%, Aura 20% - differences reflect risk and stability",
-    },
-    {
-      title: "הטבות נלוות",
-      titleEn: "Additional Benefits",
-      description: "קן התור מתמקדת בריבית קבועה נמוכה, רותשטיין בהחזרים חודשיים - כל חברה והבידול שלה",
-      descriptionEn: "Ken HaTor focuses on low fixed interest, Rotshtein on monthly returns - each company has its own differentiation",
-    },
-    {
-      title: "קהל יעד",
-      titleEn: "Target Audience",
-      description: "קן התור פונה יותר לשוק אורבני איכותי, חברות אחרות לפריפריה - יש בידול סוציו-אקונומי",
-      descriptionEn: "Ken HaTor targets more upscale urban market, other companies target periphery - socioeconomic differentiation exists",
-    },
-    {
-      title: "יציבות פיננסית",
-      titleEn: "Financial Stability",
-      description: "חברות עם גב פיננסי חזק יותר (כמו קן התור) יכולות להציע תנאים גמישים יותר בבטחה",
-      descriptionEn: "Companies with stronger financial backing (like Ken HaTor) can safely offer more flexible terms",
-    },
+      id: 'rothstein',
+      name: 'רותשטיין',
+      nameEn: 'Rothstein',
+      riskLevel: 'סיכון בינוני',
+      riskLevelEn: 'Medium Risk',
+      riskPercent: 55
+    }
   ];
 
   return (
-    <section id="ken-hator-finance" className="py-16 bg-white">
+    <section id="financing-options" className="py-16 bg-muted/30">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-12 max-w-2xl mx-auto">
-          <div className="inline-block mb-3 py-1 px-3 rounded-full bg-finance-accent text-finance-primary text-sm font-medium">
-            Ken HaTor Financing
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Real Estate Financing Solutions</h2>
+        <div className="text-center mb-12 max-w-3xl mx-auto">
+          <Badge className="mb-4">{t('Financing Solutions', 'פתרונות מימון')}</Badge>
+          <h2 className="text-3xl font-bold tracking-tight mb-4">
+            {t('Ken HaTor Financing', 'מסלולי המימון של קן התור')}
+          </h2>
           <p className="text-muted-foreground">
-            Comprehensive analysis of Ken HaTor financing options and comparison with market competitors
+            {t(
+              'Explore Ken HaTor\'s innovative financing solutions that make property ownership accessible and affordable.',
+              'גלה את פתרונות המימון החדשניים של קן התור שהופכים את הבעלות על נכס לנגישה ובמחיר סביר.'
+            )}
           </p>
         </div>
-        
-        <Tabs defaultValue="overview" className="w-full">
-          <div className="flex justify-center mb-8">
-            <TabsList className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 w-full max-w-3xl">
-              <TabsTrigger value="overview">Company Overview</TabsTrigger>
-              <TabsTrigger value="options">Financing Options</TabsTrigger>
-              <TabsTrigger value="comparison">Competitor Analysis</TabsTrigger>
-              <TabsTrigger value="clients">Client Segments</TabsTrigger>
-            </TabsList>
-          </div>
-          
-          {/* Overview Tab Content */}
+
+        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
+          <TabsList className="w-full md:w-auto grid grid-cols-2 md:grid-cols-4 gap-2">
+            <TabsTrigger value="overview">{t('Overview', 'סקירה כללית')}</TabsTrigger>
+            <TabsTrigger value="options">{t('Financing Options', 'אפשרויות מימון')}</TabsTrigger>
+            <TabsTrigger value="comparison">{t('Competitor Comparison', 'השוואת מתחרים')}</TabsTrigger>
+            <TabsTrigger value="audience">{t('Target Audience', 'קהל יעד')}</TabsTrigger>
+          </TabsList>
+
           <TabsContent value="overview" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="overflow-hidden">
                 <CardHeader className="bg-finance-primary text-white">
-                  <CardTitle>Ken HaTor Financing Capabilities</CardTitle>
+                  <CardTitle>{t('Ken HaTor Financing Capabilities', 'יכולות המימון של קן התור')}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-4">
                   <div className="space-y-2">
                     <h3 className="text-lg font-medium flex items-center">
                       <Shield className="mr-2 h-5 w-5 text-finance-primary" />
-                      Financial Security
+                      {t('Financial Security', 'ביטחון פיננסי')}
                     </h3>
                     <p className="text-muted-foreground">
-                      Ken HaTor maintains high self-financing capability alongside long-term collaborations with banks and financial institutions. This enables the company to finance projects with full or partial bank supervision, offering buyers security in the knowledge that the project is backed by a stable financial entity.
+                      {t(
+                        'Ken HaTor maintains high self-financing capability alongside long-term collaborations with banks and financial institutions. This enables the company to finance projects with full or partial bank supervision, offering buyers security in the knowledge that the project is backed by a stable financial entity.',
+                        'לחברת קן התור יכולת מימון עצמית גבוהה, לצד שיתופי פעולה ארוכי-טווח עם בנקים וחברות מימון. יכולת זו מאפשרת לחברה לממן פרויקטים בליווי בנקאי מלא או חלקי, ולהציע לרוכשים ביטחון בכך שהפרויקט מלווה בגוף פיננסי יציב.'
+                      )}
                     </p>
                   </div>
                   
                   <div className="space-y-2">
                     <h3 className="text-lg font-medium flex items-center">
                       <Building className="mr-2 h-5 w-5 text-finance-primary" />
-                      Bank Supervision & Guarantees
+                      {t('Bank Supervision & Guarantees', 'ליווי בנקאי וערבויות')}
                     </h3>
                     <p className="text-muted-foreground">
-                      In every new residential project, Ken HaTor operates under bank or institutional supervision. This means buyers pay according to construction progress (phased payments) and receive a bank guarantee for each payment under the Sale Law. This supervision protects buyers in case of project failure and ensures funds are used solely for construction purposes.
+                      {t(
+                        'In every new residential project, Ken HaTor operates under bank or institutional supervision. This means buyers pay according to construction progress (phased payments) and receive a bank guarantee for each payment under the Sale Law. This supervision protects buyers in case of project failure and ensures funds are used solely for construction purposes.',
+                        'בכל פרויקט מגורים חדש, קן התור פועלת תחת ליווי בנקאי או מוסדי. המשמעות היא שהרוכשים משלמים בהתאם לקצב ההתקדמות בבנייה (תשלומים בשלבים), ותמורת כל תשלום מקבלים ערבות בנקאית על פי חוק המכר. צורת ליווי זו מגינה על הרוכשים במקרה של כשל פרויקט, ומבטיחה שהכספים ישמשו את מטרת הבנייה בלבד.'
+                      )}
                     </p>
                   </div>
                   
                   <div className="space-y-2">
                     <h3 className="text-lg font-medium flex items-center">
                       <Briefcase className="mr-2 h-5 w-5 text-finance-primary" />
-                      Target Audience Flexibility
+                      {t('Target Audience Flexibility', 'גמישות לקהל היעד')}
                     </h3>
                     <p className="text-muted-foreground">
-                      Ken HaTor's flexible terms indicate they target diverse audiences, not just standard first-time homebuyers. Young couples and upgraders with limited equity benefit from arrangements like 10%-90%, allowing them to start the process with a small down payment. The company also explicitly identifies investors as a target audience, with project advertisements stating the opportunity is for both homebuyers and investors.
+                      {t(
+                        'Ken HaTor\'s flexible terms indicate they target diverse audiences, not just standard first-time homebuyers. Young couples and upgraders with limited equity benefit from arrangements like 10%-90%, allowing them to start the process with a small down payment. The company also explicitly identifies investors as a target audience, with project advertisements stating the opportunity is for both homebuyers and investors.',
+                        'התנאים הגמישים של קן התור מעידים שהחברה פונה למגוון קהלי יעד, ולא רק לרוכשי דירה ראשונה סטנדרטיים. זוגות צעירים ומשפרי דיור עם הון עצמי מוגבל נהנים ממתווים כמו 10%-90% שמאפשרים להם להתחיל את התהליך עם מקדמה קטנה. החברה גם מזהה במפורש משקיעים כקהל מטרה, כאשר בפרסומי הפרויקטים מצוין שההזדמנות היא לרוכשי בית ולמשקיעים גם יחד.'
+                      )}
                     </p>
                   </div>
                 </CardContent>
@@ -398,15 +201,15 @@ const KenHaTorFinance: React.FC = () => {
               <div className="space-y-6">
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-medium">Financial Risk Profile</CardTitle>
+                    <CardTitle className="text-base font-medium">{t('Financial Risk Profile', 'פרופיל סיכון פיננסי')}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {companies.map((company) => (
+                      {companyRiskProfiles.map((company) => (
                         <div key={company.id} className="space-y-1">
                           <div className="flex justify-between text-sm">
-                            <span>{company.nameEn}</span>
-                            <span className="font-medium">{company.riskLevelEn}</span>
+                            <span>{isRTL ? company.name : company.nameEn}</span>
+                            <span className="font-medium">{isRTL ? company.riskLevel : company.riskLevelEn}</span>
                           </div>
                           <Progress 
                             value={company.riskPercent} 
@@ -420,27 +223,45 @@ const KenHaTorFinance: React.FC = () => {
                 
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-medium">Financial Partnerships</CardTitle>
+                    <CardTitle className="text-base font-medium">{t('Financial Partnerships', 'שותפויות פיננסיות')}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-sm text-muted-foreground">
-                      Ken HaTor emphasizes close working relationships with banks and financial companies over the years. In practice, this means the company is able to mobilize lending banks to provide credit for projects and for buyers.
+                      {t(
+                        'Ken HaTor emphasizes close working relationships with banks and financial companies over the years. In practice, this means the company is able to mobilize lending banks to provide credit for projects and for buyers.',
+                        'קן התור מדגישה קשרי עבודה הדוקים עם בנקים וחברות מימון לאורך שנים. פרקטית, פירוש הדבר הוא שהחברה מסוגלת לרתום בנקים מלווים למתן אשראי לפרויקטים ועבור הרוכשים.'
+                      )}
                     </p>
                     
                     <div className="bg-muted p-4 rounded-lg">
-                      <h4 className="font-medium mb-2">Key Financial Collaboration:</h4>
+                      <h4 className="font-medium mb-2">{t('Key Financial Collaboration:', 'שיתוף פעולה פיננסי מרכזי:')}</h4>
                       <div className="space-y-2">
                         <div className="flex items-start">
                           <ChevronRight className="h-4 w-4 mr-2 text-finance-primary flex-shrink-0 mt-0.5" />
-                          <p className="text-sm">Fixed-rate mortgage at 2.99% for 20 years (presumably with a major bank that agreed to discounted interest rates)</p>
+                          <p className="text-sm">
+                            {t(
+                              'Fixed-rate mortgage at 2.99% for 20 years (presumably with a major bank that agreed to discounted interest rates)',
+                              'משכנתא בריבית קבועה של 2.99% ל-20 שנה (כנראה עם בנק גדול שהסכים לריבית מוזלת)'
+                            )}
+                          </p>
                         </div>
                         <div className="flex items-start">
                           <ChevronRight className="h-4 w-4 mr-2 text-finance-primary flex-shrink-0 mt-0.5" />
-                          <p className="text-sm">Possible collaboration with non-bank financial institutions for supplementary equity financing for buyers</p>
+                          <p className="text-sm">
+                            {t(
+                              'Possible collaboration with non-bank financial institutions for supplementary equity financing for buyers',
+                              'שיתוף פעולה אפשרי עם מוסדות פיננסיים חוץ-בנקאיים להשלמת הון עצמי לרוכשים'
+                            )}
+                          </p>
                         </div>
                         <div className="flex items-start">
                           <ChevronRight className="h-4 w-4 mr-2 text-finance-primary flex-shrink-0 mt-0.5" />
-                          <p className="text-sm">Ken HaTor views bank supervision as an integral part of the secure purchase experience</p>
+                          <p className="text-sm">
+                            {t(
+                              'Ken HaTor views bank supervision as an integral part of the secure purchase experience',
+                              'קן התור רואה בליווי הבנקאי חלק בלתי נפרד מחוויית הרכישה הבטוחה'
+                            )}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -449,8 +270,7 @@ const KenHaTorFinance: React.FC = () => {
               </div>
             </div>
           </TabsContent>
-          
-          {/* Financing Options Tab */}
+
           <TabsContent value="options" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {financingOptions.map((option) => (
@@ -460,50 +280,50 @@ const KenHaTorFinance: React.FC = () => {
                       {option.icon}
                     </div>
                     <div>
-                      <h3 className="font-medium">{option.titleEn}</h3>
-                      <p className="text-xs opacity-75">{option.title}</p>
+                      <h3 className="font-medium">{isRTL ? option.title : option.titleEn}</h3>
+                      <p className="text-xs opacity-75">{isRTL ? option.titleEn : option.title}</p>
                     </div>
                   </div>
                   
                   <CardContent className="p-5 space-y-4">
-                    <p className="text-sm text-muted-foreground">{option.descriptionEn}</p>
+                    <p className="text-sm text-muted-foreground">{isRTL ? option.description : option.descriptionEn}</p>
                     
                     <div className="bg-muted/50 p-3 rounded-lg">
-                      {option.id === 'low-deposit' && (
+                      {option.id === 'low-deposit' && option.depositRange && (
                         <div className="flex justify-between mb-2">
-                          <span className="text-sm">Initial Deposit:</span>
+                          <span className="text-sm">{t('Initial Deposit:', 'מקדמה ראשונית:')}</span>
                           <span className="font-bold">{option.depositRange}</span>
                         </div>
                       )}
-                      {option.id === 'fixed-rate' && (
+                      {option.id === 'fixed-rate' && option.rate && (
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-sm">Interest Rate:</span>
+                            <span className="text-sm">{t('Interest Rate:', 'שיעור ריבית:')}</span>
                             <span className="font-bold">{option.rate}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm">Term:</span>
-                            <span className="font-bold">{option.termEn}</span>
+                            <span className="text-sm">{t('Term:', 'תקופה:')}</span>
+                            <span className="font-bold">{isRTL ? option.term : option.termEn}</span>
                           </div>
                         </div>
                       )}
-                      {option.id === 'pre-sale' && (
+                      {option.id === 'pre-sale' && option.discount && (
                         <div className="flex justify-between mb-2">
-                          <span className="text-sm">Average Discount:</span>
+                          <span className="text-sm">{t('Average Discount:', 'הנחה ממוצעת:')}</span>
                           <span className="font-bold">{option.discount}</span>
                         </div>
                       )}
                       
                       <div className="mt-2">
-                        <span className="text-sm">Ideal For:</span>
-                        <p className="font-medium text-sm mt-1">{option.idealForEn}</p>
+                        <span className="text-sm">{t('Ideal For:', 'מתאים ל:')}</span>
+                        <p className="font-medium text-sm mt-1">{isRTL ? option.idealFor : option.idealForEn}</p>
                       </div>
                     </div>
                     
                     <div>
-                      <h4 className="text-sm font-medium mb-2">Key Features:</h4>
+                      <h4 className="text-sm font-medium mb-2">{t('Key Features:', 'תכונות מרכזיות:')}</h4>
                       <ul className="space-y-1">
-                        {option.featuresEn.map((feature, index) => (
+                        {(isRTL ? option.features : option.featuresEn).map((feature, index) => (
                           <li key={index} className="flex items-start text-sm">
                             <Check className="h-4 w-4 mr-2 text-finance-success flex-shrink-0 mt-0.5" />
                             <span>{feature}</span>
@@ -514,7 +334,7 @@ const KenHaTorFinance: React.FC = () => {
                     
                     <Button variant="outline" className="w-full mt-2">
                       <ArrowRight className="mr-2 h-4 w-4" />
-                      Learn More
+                      {t('Learn More', 'למידע נוסף')}
                     </Button>
                   </CardContent>
                 </Card>
@@ -523,189 +343,98 @@ const KenHaTorFinance: React.FC = () => {
             
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Payment Flexibility</CardTitle>
+                <CardTitle className="text-xl">{t('Payment Flexibility', 'גמישות בתשלומים')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p>
-                  Information indicates that Ken HaTor is willing to adapt the payment structure to the client's profile. The term "flexible payments during construction" appeared in connection with the low down payment track, so that a buyer who can and wants to pay part of the amount before occupancy can do so at a spread convenient to them.
+                  {t(
+                    'Information indicates that Ken HaTor is willing to adapt the payment structure to the client\'s profile. The term "flexible payments during construction" appeared in connection with the low down payment track, so that a buyer who can and wants to pay part of the amount before occupancy can do so at a spread convenient to them.',
+                    'מהמידע עולה כי קן התור מגלה נכונות להתאים את מתווה התשלום לפרופיל הלקוח. הביטוי "תשלומים גמישים במהלך הבנייה" חזר בהקשר למסלול המקדמה הנמוכה, כך שרוכש שיכול ורוצה לשלם חלק מהסכום לפני האכלוס - יש באפשרותו לעשות זאת בפריסה הנוחה לו.'
+                  )}
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                   <div className="bg-muted/40 p-4 rounded-lg">
                     <h4 className="font-medium mb-2 flex items-center">
                       <Users className="h-4 w-4 mr-2 text-finance-primary" />
-                      Young Couple Example
+                      {t('Young Couple Example', 'דוגמה לזוג צעיר')}
                     </h4>
                     <p className="text-sm">
-                      A young couple could pay 7% at signing, then add another 3% when their savings plan matures, and defer the remaining 90% to occupancy with a mortgage. This customization gives them breathing room while planning their finances.
+                      {t(
+                        'A young couple could pay 7% at signing, then add another 3% when their savings plan matures, and defer the remaining 90% to occupancy with a mortgage. This customization gives them breathing room while planning their finances.',
+                        'זוג צעיר יכול לשלם 7% בחתימה, להוסיף עוד 3% כשתוכנית החיסכון שלהם מבשילה, ולדחות את 90% הנותרים לאכלוס עם משכנתא. התאמה אישית זו נותנת להם מרווח נשימה בתכנון הפיננסי שלהם.'
+                      )}
                     </p>
                   </div>
                   
                   <div className="bg-muted/40 p-4 rounded-lg">
                     <h4 className="font-medium mb-2 flex items-center">
                       <Briefcase className="h-4 w-4 mr-2 text-finance-primary" />
-                      Investor Example
+                      {t('Investor Example', 'דוגמה למשקיע')}
                     </h4>
                     <p className="text-sm">
-                      An investor planning to sell another property could arrange a personalized schedule: 10% at signing, another 20% after selling their current asset, and the remaining 70% at occupancy. This maximizes their investment potential.
+                      {t(
+                        'An investor might pay 10% upon signing, an additional 30% from the sale of another asset a year later, and the remaining 60% at occupancy. This arrangement allows for optimal utilization of their investment portfolio.',
+                        'משקיע עשוי לשלם 10% בעת החתימה, עוד 30% ממכירת נכס אחר כעבור שנה, ואת 60% הנותרים באכלוס. הסדר זה מאפשר ניצול מיטבי של תיק ההשקעות שלו.'
+                      )}
                     </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
-          
-          {/* Competitor Comparison Tab */}
-          <TabsContent value="comparison" className="space-y-8">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[180px]">Company</TableHead>
-                    <TableHead>Initial Deposit</TableHead>
-                    <TableHead>Remaining Payment</TableHead>
-                    <TableHead className="min-w-[250px]">Special Benefits</TableHead>
-                    <TableHead className="min-w-[200px]">Target Audience</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {companies.map((company) => (
-                    <TableRow key={company.id} className={company.id === 'ken-hator' ? 'bg-finance-accent/20' : ''}>
-                      <TableCell className="font-medium">
-                        {company.nameEn}
-                        {company.id === 'ken-hator' && 
-                          <Badge className="ml-2 bg-finance-primary">Featured</Badge>
-                        }
-                      </TableCell>
-                      <TableCell>{company.deposit}</TableCell>
-                      <TableCell>{company.paymentMethodEn}</TableCell>
-                      <TableCell>
-                        <ul className="list-disc pl-4 text-sm space-y-1">
-                          {company.specialBenefitsEn.map((benefit, index) => (
-                            <li key={index}>{benefit}</li>
-                          ))}
-                        </ul>
-                      </TableCell>
-                      <TableCell className="text-sm">{company.targetAudienceEn}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
+
+          <TabsContent value="comparison" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Similarities Across Companies</CardTitle>
+                  <CardTitle>Competitor A</CardTitle>
                 </CardHeader>
-                <CardContent className="p-4">
-                  <div className="space-y-4">
-                    {similarities.map((item, index) => (
-                      <div key={index} className="pb-3 border-b last:border-0 last:pb-0">
-                        <h4 className="font-medium flex items-center">
-                          <Check className="mr-2 h-4 w-4 text-finance-success" />
-                          {item.titleEn}
-                        </h4>
-                        <p className="text-sm text-muted-foreground mt-1">{item.descriptionEn}</p>
-                      </div>
-                    ))}
-                  </div>
+                <CardContent>
+                  <p>Details about Competitor A's financing options.</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Key Differentiators</CardTitle>
+                  <CardTitle>Competitor B</CardTitle>
                 </CardHeader>
-                <CardContent className="p-4">
-                  <div className="space-y-4">
-                    {differences.map((item, index) => (
-                      <div key={index} className="pb-3 border-b last:border-0 last:pb-0">
-                        <h4 className="font-medium flex items-center">
-                          <ArrowRight className="mr-2 h-4 w-4 text-finance-primary" />
-                          {item.titleEn}
-                        </h4>
-                        <p className="text-sm text-muted-foreground mt-1">{item.descriptionEn}</p>
-                      </div>
-                    ))}
-                  </div>
+                <CardContent>
+                  <p>Details about Competitor B's financing options.</p>
                 </CardContent>
               </Card>
             </div>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Market Position Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4">
-                  The Israeli real estate market in 2023-2025 has been characterized by a certain slowdown in sales due to rising interest rates, which has driven many developers to offer creative financing solutions to attract buyers. Ken HaTor is a prominent example of this trend, but it is certainly not the only one.
-                </p>
-                
-                <p>
-                  What distinguishes Ken HaTor is a balance between financial creativity and responsible conservatism: it offers customers some of the best terms in the market, but while relying on financial strength and controlled bank partnership - thus conveying security alongside attractiveness. In the eyes of buyers, the important thing is to meet their needs: both Ken HaTor and its competitors currently provide such a response, with slight differences in emphasis.
-                </p>
-              </CardContent>
-            </Card>
           </TabsContent>
-          
-          {/* Client Segments Tab */}
-          <TabsContent value="clients" className="space-y-8">
+
+          <TabsContent value="audience" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {clientSegments.map((segment) => (
-                <Card key={segment.id} className="overflow-hidden">
-                  <div className="p-6 flex flex-col items-center text-center border-b">
-                    <div className="w-16 h-16 bg-finance-accent rounded-full flex items-center justify-center mb-4">
-                      {segment.icon}
-                    </div>
-                    <h3 className="text-xl font-medium">{segment.nameEn}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{segment.descriptionEn}</p>
-                  </div>
-                  
-                  <CardContent className="p-5">
-                    <div className="mb-4">
-                      <h4 className="text-sm font-medium mb-2">Ideal Financing Plans:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {segment.idealPlansEn.map((plan, index) => (
-                          <Badge key={index} variant="outline">{plan}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-sm font-medium mb-2">Key Benefits:</h4>
-                      <ul className="space-y-1">
-                        {segment.benefitsEn.map((benefit, index) => (
-                          <li key={index} className="flex items-start text-sm">
-                            <Check className="h-4 w-4 mr-2 text-finance-success flex-shrink-0 mt-0.5" />
-                            <span>{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Young Couples</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>Information about financing options for young couples.</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Investors</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>Information about financing options for investors.</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Families</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>Information about financing options for families.</p>
+                </CardContent>
+              </Card>
             </div>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Target Audience Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4">
-                  The findings above indicate that Ken HaTor targets an audience with medium to high economic capability, interested in a new apartment but seeking assistance in the cash flow and financial aspect. These are people who want to upgrade housing in a big city (Tel Aviv-Jaffa, for example) or invest in property, but may not have all the initial capital required immediately. The payment tracks offered "lower the bar" for them.
-                </p>
-                
-                <p className="mb-4">
-                  In terms of payment preferences, it is clear that the customers Ken HaTor appeals to prefer payment deferral, stable interest and high certainty. Many of them are willing to pay a little more in the long run (for example, to bear interest or forego a cash discount) in exchange for liquidity now.
-                </p>
-                
-                <p>
-                  Psychologically, such buyers seek to reduce personal risks: instead of taking a heavy mortgage from day one, they enter gradually. On the other hand, the level of risk they are willing to take depends on the company's stability - their willingness to pay 7% now stems from the trust that Ken HaTor will meet its obligations.
-                </p>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
       </div>

@@ -3,10 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import LanguageSwitcher from './LanguageSwitcher';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { t, isRTL } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,10 +33,11 @@ const Header: React.FC = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <NavLink href="#dashboard">Dashboard</NavLink>
-          <NavLink href="#financing-paths">Financing Paths</NavLink>
-          <NavLink href="#analysis">Analysis</NavLink>
-          <Button size="sm" className="ml-4">Get Started</Button>
+          <NavLink href="#dashboard">{t('Dashboard', 'לוח בקרה')}</NavLink>
+          <NavLink href="#financing-paths">{t('Financing Paths', 'מסלולי מימון')}</NavLink>
+          <NavLink href="#analysis">{t('Analysis', 'ניתוח')}</NavLink>
+          <Button size="sm" className="ml-4">{t('Get Started', 'התחל')}</Button>
+          <LanguageSwitcher />
         </nav>
 
         {/* Mobile Menu Button */}
@@ -55,15 +59,18 @@ const Header: React.FC = () => {
         <div className="md:hidden glass px-4 py-5 absolute top-full left-0 right-0 animate-fade-down">
           <nav className="flex flex-col space-y-4">
             <MobileNavLink href="#dashboard" onClick={() => setIsMenuOpen(false)}>
-              Dashboard
+              {t('Dashboard', 'לוח בקרה')}
             </MobileNavLink>
             <MobileNavLink href="#financing-paths" onClick={() => setIsMenuOpen(false)}>
-              Financing Paths
+              {t('Financing Paths', 'מסלולי מימון')}
             </MobileNavLink>
             <MobileNavLink href="#analysis" onClick={() => setIsMenuOpen(false)}>
-              Analysis
+              {t('Analysis', 'ניתוח')}
             </MobileNavLink>
-            <Button size="sm" className="mt-4 w-full">Get Started</Button>
+            <Button size="sm" className="mt-4 w-full">{t('Get Started', 'התחל')}</Button>
+            <div className="mt-2">
+              <LanguageSwitcher />
+            </div>
           </nav>
         </div>
       )}
