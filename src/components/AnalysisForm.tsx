@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface FormValues {
   businessName: string;
@@ -248,7 +248,7 @@ const AnalysisForm: React.FC = () => {
                           <SelectValue placeholder="Select time frame" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="immediate">Immediate (< 30 days)</SelectItem>
+                          <SelectItem value="immediate">Immediate (&lt; 30 days)</SelectItem>
                           <SelectItem value="short">Short-term (1-3 months)</SelectItem>
                           <SelectItem value="medium">Medium-term (3-6 months)</SelectItem>
                           <SelectItem value="long">Long-term (6+ months)</SelectItem>
